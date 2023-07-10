@@ -1,13 +1,13 @@
 #include <iostream>
-#include <string>
+#include <cmath>
 
 using namespace std;
 
 class Fruit
 {
 public:
-    int quantity;
-    int price;
+    float quantity;
+    float price;
     Fruit(int q = 0, int p = 0)
     {
         quantity = q;
@@ -19,6 +19,7 @@ public:
     Fruit operator*(Fruit &fruit);
     Fruit operator/(Fruit &fruit);
     Fruit operator++();
+    Fruit operator++(int a);
 };
 
 void Fruit::printFruit()
@@ -37,8 +38,8 @@ Fruit Fruit::operator+(Fruit &fruit)
 Fruit Fruit::operator-(Fruit &fruit)
 {
     Fruit my_fruit;
-    my_fruit.quantity = quantity - fruit.quantity;
-    my_fruit.price = price - fruit.price;
+    my_fruit.quantity = abs(quantity - fruit.quantity);
+    my_fruit.price = abs(price - fruit.price);
     return my_fruit;
 }
 
@@ -53,8 +54,10 @@ Fruit Fruit::operator*(Fruit &fruit)
 Fruit Fruit::operator/(Fruit &fruit)
 {
     Fruit my_fruit;
-    my_fruit.quantity = quantity / fruit.quantity;
-    my_fruit.price = price / fruit.price;
+    if (fruit.quantity == 0)    my_fruit.quantity = 0;
+    else { my_fruit.quantity = quantity / fruit.quantity; }
+    if (fruit.price == 0)   my_fruit.price = 0;
+    else { my_fruit.price = price / fruit.price; }
     return my_fruit;
 }
 
@@ -65,9 +68,16 @@ Fruit Fruit :: operator++()
     return *this;
 }
 
+Fruit Fruit :: operator++(int a)
+{
+    quantity++;
+    price++;
+    return *this;
+}
+
 int main() {
-    Fruit mango(10, 10);
-    Fruit coconut (5, 5);
+    Fruit mango(10, 5);
+    Fruit coconut (5, 0);
 
     Fruit sum = mango + coconut;
     sum.printFruit();
@@ -81,8 +91,10 @@ int main() {
     Fruit quotient = mango / coconut;
     quotient.printFruit();
 
-    ++mango; // To Saad: why prefix increment works and postfix gives error?
+    ++mango;
+    coconut++;
     mango.printFruit();
+    coconut.printFruit();
 
     return 0;
 }
